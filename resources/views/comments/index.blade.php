@@ -8,7 +8,7 @@
         <h4 class="media-heading">
             {{ $comment->user->name }}
             <small class="pull-right text-right" data-commet-id="{{ $comment->id }}">
-                Vote:{{ $comment->vote }} <br>
+                Vote:{{ $comment->user->name }} <br>
                 Вам помог комментарий:
                 <a href="{{ route('comments.vote', ['id' => $comment->id]) }}?vote=yes">да</a>
                 <a href="{{ route('comments.vote', ['id' => $comment->id]) }}?vote=no">нет</a>

@@ -25,6 +25,10 @@ class Post extends Model
     | Relationship Methods
     |--------------------------------------------------------------------------
     */
+    public function commentVote()
+    {
+        return $this->hasMany('App\Models\Comments\CommentVote');
+    }
     /**
      * An post is owned by a user
      *

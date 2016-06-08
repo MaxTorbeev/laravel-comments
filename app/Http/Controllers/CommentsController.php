@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Comments\Comment;
 use App\Models\Comments\CommentVote;
 use App\Post;
-use App\User;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -30,8 +29,9 @@ class CommentsController extends Controller
     public function vote($id, Request $request, Comment $comment)
     {
         $comment = $comment->where('id', $id)->firstOrFail();
+        $vote = $comment->commentVote()->first();
 
-        dd(User::comment());
+        dd($vote);
 
         if ($request->input('vote') === 'yes')
         {
