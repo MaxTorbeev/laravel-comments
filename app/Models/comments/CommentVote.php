@@ -14,7 +14,7 @@ class CommentVote extends Model
 
     public function comment()
     {
-        $this->belongsTo('App\Models\Comments\Comment', 'comment_id');
+        return $this->belongsTo('App\Models\Comments\Comment');
     }
 
     public function user()
