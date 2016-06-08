@@ -40,9 +40,9 @@ class Post extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function comments()
+    public function comment()
     {
-        return $this->belongsToMany('App\Comment', 'comment_post', 'post_id', 'comment_id');
+        return $this->belongsToMany('App\Models\Comments\Comment', 'comment_post', 'post_id', 'comment_id');
     }
 
 }

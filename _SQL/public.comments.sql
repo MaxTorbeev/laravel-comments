@@ -1,48 +1,67 @@
-﻿-- Sequence: public.posts_id_seq
-
--- DROP SEQUENCE public.posts_id_seq;
-
-CREATE SEQUENCE public.comments_id_seq
-INCREMENT 1
-MINVALUE 1
-MAXVALUE 9223372036854775807
-START 1
-CACHE 1;
-ALTER TABLE public.comments_id_seq
-OWNER TO postgres;
-
--- Table: public.comments
+﻿-- Table: public.comments
 
 -- DROP TABLE public.comments;
 
 CREATE TABLE public.comments
 (
-  id           INTEGER                NOT NULL DEFAULT nextval('comments_id_seq' :: REGCLASS), -- id комментария
-  user_id      INTEGER                NOT NULL, -- id пользователя, создавший комментарий
-  post_id      INTEGER                NOT NULL, -- id поста, к которому создан комментарий
-  parent_id    INTEGER                NOT NULL, -- id родительского комментария
-  karma        CHARACTER VARYING(255) NOT NULL, -- карма комментария
-  user_ip      CHARACTER VARYING(255) NOT NULL, -- ip адресс, пользователя, создавшего комментарий
-  content      TEXT                   NOT NULL, -- содержимое комментария
-  published_at TIMESTAMP(0) WITHOUT TIME ZONE, -- дата публикации комментария
-  created_at   TIMESTAMP(0) WITHOUT TIME ZONE, -- дата создания
-  updated_at   TIMESTAMP(0) WITHOUT TIME ZONE, -- дата обновления
+  id integer NOT NULL DEFAULT nextval('comments_id_seq'::regclass),
+  user_id integer DEFAULT 0,
+  post_id integer NOT NULL,
+  parent_id integer DEFAULT 0,
+  karma integer DEFAULT 0,
+  level integer DEFAULT 0,
+  user_ip character varying(255),
+  content text NOT NULL,
+  published_at timestamp(0) without time zone,
+  created_at timestamp(0) without time zone,
+  updated_at timestamp(0) without time zone,
   CONSTRAINT comments_pkey PRIMARY KEY (id),
+  CONSTRAINT comments_post_id_foreign FOREIGN KEY (post_id)
+  REFERENCES public.posts (id) MATCH SIMPLE
+  ON UPDATE CASCADE ON DELETE CASCADE,
   CONSTRAINT comments_user_id_foreign FOREIGN KEY (user_id)
   REFERENCES public.users (id) MATCH SIMPLE
   ON UPDATE CASCADE ON DELETE CASCADE
 )
-WITH ( OIDS =FALSE );
+WITH (
+OIDS=FALSE
+);
 ALTER TABLE public.comments
 OWNER TO postgres;
 
+-- Index: public.comments_karma_index
 
-CREATE TABLE public.comment_post
-(
-  id         INTEGER NOT NULL DEFAULT nextval('comments_id_seq' :: REGCLASS), -- id комментария
-  comment_id INTEGER NOT NULL, -- id пользователя, создавший комментарий
-  post_id    INTEGER NOT NULL -- id поста, к которому создан комментарий
-)
-WITH ( OIDS =FALSE );
-ALTER TABLE public.comment_post
-OWNER TO postgres;
+-- DROP INDEX public.comments_karma_index;
+
+CREATE INDEX comments_karma_index
+ON public.comments
+USING btree
+(karma);
+
+-- Index: public.comments_level_index
+
+-- DROP INDEX public.comments_level_index;
+
+CREATE INDEX comments_level_index
+ON public.comments
+USING btree
+(level);
+
+-- Index: public.comments_parent_id_index
+
+-- DROP INDEX public.comments_parent_id_index;
+
+CREATE INDEX comments_parent_id_index
+ON public.comments
+USING btree
+(parent_id);
+
+-- Index: public.comments_user_id_index
+
+-- DROP INDEX public.comments_user_id_index;
+
+CREATE INDEX comments_user_id_index
+ON public.comments
+USING btree
+(user_id);
+

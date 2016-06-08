@@ -7,21 +7,23 @@ Route::get('/', function () {
 
 Route::resource('/posts', 'PostsController',
     ['names' => [
-        'index' => 'posts.index',
-        'store' => 'posts.store',
-        'show'  => 'posts.show',
+        'index'     => 'posts.index',
+        'store'     => 'posts.store',
+        'show'      => 'posts.show',
     ]
 ]);
 
 Route::get('/comments/vote/{id}', [
-    'as'   => 'comments.vote',
-    'uses'   => 'CommentsController@vote'
+    'as'            => 'comments.vote',
+    'uses'          => 'CommentsController@vote'
 ]);
 
 Route::resource('/comments', 'CommentsController',
     ['names' => [
-        'index' => 'comments.index',
-        'store' => 'comments.store',
+        'index'     => 'comments.index',
+        'store'     => 'comments.store',
+        'update'     => 'comments.update',
+        'destroy'    => 'comments.destroy',
     ]
 ]);
 

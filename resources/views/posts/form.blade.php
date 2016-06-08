@@ -35,12 +35,12 @@
 
         <div class="form-group">
             {!! Form::label('metadesc', 'meta-description:') !!}
-            {!! Form::input('text', 'metadesc', $post->metadesc, ['class'=>'form-control' ]) !!}
+            {!! Form::input('text', 'metadesc', null, ['class'=>'form-control' ]) !!}
         </div>
 
         <div class="form-group">
             {!! Form::label('metakey', 'meta-keywords:') !!}
-            {!! Form::input('text', 'metakey', $post->metadesc, ['class'=>'form-control' ]) !!}
+            {!! Form::input('text', 'metakey', null, ['class'=>'form-control' ]) !!}
         </div>
 
     </div>

@@ -49,28 +49,56 @@
 @stop
 
 @section('footer')
-
+    <script src="{{ url('js/public.js') }}"></script>
     <script>
-        function form(tag){
-            var replayId = $(tag).data('replay-comment-id'),
-                level = $(tag).data('replay-level');
 
-            return '<form class="comment-form" action=" {{ route("comments.store") }}" method="POST">' +
-                    '<input type="hidden" name="_token" value="{{ csrf_token() }}">' +
-                    '<textarea class="form-control" rows="3" name="content" cols="50" id="content"></textarea>' +
-                    '<input type="hidden" name="post_id" value="{{ $post->id }}">' +
-                    '<input type="hidden" name="level" value="' + level + '">' +
-                    '<input type="hidden" name="user_id" value="{{ Auth::user()->id }}">' +
-                    '<input type="hidden" name="parent_id" value="' + replayId + '">' +
-                    '<input type="submit" value="comment">' +
+        function form(tag, method, text){
+            var csrftoken   = $('meta[name=_token]').attr('content'),
+                actionForm  = $(tag).attr('href'),
+                parentId    = $(tag).data('comment-parent-id'),
+                level       = $(tag).data('comment-level');
+                tokenMethod = '';
+
+            if ($.trim(method) == 'put')
+                tokenMethod = '<input type="hidden" name="_method" value="put" />'
+
+            return '<form class="comment-form" action="' + actionForm + '" method="post">' +
+                    tokenMethod +
+                   '<input type="hidden" name="_token" value="{{ csrf_token() }}">' +
+                   '<textarea class="form-control" rows="3" name="content" cols="50" id="content">' + text + '</textarea>' +
+                   '<input type="hidden" name="post_id" value="{{ $post->id }}">' +
+                   '<input type="hidden" name="level" value="' + level + '">' +
+                   '<input type="hidden" name="user_id" value="{{ Auth::user()->id }}">' +
+                   '<input type="hidden" name="parent_id" value="' + parentId + '">' +
+                   '<input type="submit" class="btn btn-primary btn-small" value="save">' +
                     '</form>'
         }
 
         $('.replayComment').on('click', function(e){
             e.preventDefault();
             if ($(this).siblings().hasClass('comment-form') == false) {
-                $(this).parent().append(form(this));
+                $(this).parent().append(form(this, 'POST', ''));
             }
         });
+
+        $('.deleteComment').on('click', function(e){
+            var urlForDelete = $(this).attr('href'),
+                csrftoken = $('meta[name=_token]').attr('content');
+
+            e.preventDefault();
+            $.ajax({
+                url: urlForDelete,
+                type: 'DELETE',
+                success: function(result) {
+                    location.reload();
+                }
+            });
+        });
+
+        $('.updateComment').on('click', function(e){
+            e.preventDefault();
+            $(this).siblings('.comment-body').html(form(this, 'put', $.trim( $(this).siblings('.comment-body').html() )));
+        })
+
     </script>
 @stop

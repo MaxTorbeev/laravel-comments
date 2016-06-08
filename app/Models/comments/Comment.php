@@ -1,8 +1,9 @@
 <?php
 
-namespace App;
+namespace App\Models\Comments;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Comment extends Model
 {
@@ -43,9 +44,14 @@ class Comment extends Model
         return $this->belongsToMany('App\Post');
     }
 
+    public function commentVote()
+    {
+        return $this->belongsTo('App\Models\Comments\CommentVote', 'comment_id');
+    }
+
     public function children()
     {
-        return $this->hasMany('App\Comment', 'parent_id');
+        return $this->hasMany('App\Models\Comments\Comment', 'parent_id');
     }
 
     public function childrenRecursive()
@@ -55,7 +61,7 @@ class Comment extends Model
 
     public function parent()
     {
-        return $this->belongsTo('App\Comment');
+        return $this->belongsTo('App\Models\Comments\Comment');
     }
 
     public function parentRecursive()

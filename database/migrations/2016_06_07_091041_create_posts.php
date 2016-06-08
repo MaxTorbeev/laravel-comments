@@ -18,11 +18,11 @@ class CreatePosts extends Migration
             $table->integer('user_id')->unsigned();
             $table->string('alias');
             $table->string('title');
-            $table->text('intro_text');
+            $table->text('intro_text')->nullable();
             $table->text('body');
-            $table->text('image');
-            $table->text('metakey');
-            $table->text('metadesc');
+            $table->text('image')->nullable();
+            $table->text('metakey')->nullable();
+            $table->text('metadesc')->nullable();
             $table->timestamp('published_at')->nullable();
             $table->timestamps();
 

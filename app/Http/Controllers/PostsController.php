@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Post;
 use Illuminate\Http\Request;
+use App\Models\Comments\Comment;
 
 use App\Http\Requests;
 use Illuminate\Support\Facades\Auth;
-use PhpParser\Comment;
 
 class PostsController extends Controller
 {
@@ -45,9 +45,9 @@ class PostsController extends Controller
     public function show($id)
     {
         $post = Post::where('id', $id)->firstOrFail();
-        $comments = $post->comments()
+        $comments = $post->comment()
             ->where('level', '0')
-            ->orderBy('karma', 'DESC')
+            ->orderBy('vote', 'DESC')
             ->get();
 
         return view('posts.show', compact('post', 'comments'));
