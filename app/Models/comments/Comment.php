@@ -46,7 +46,7 @@ class Comment extends Model
 
     public function commentVote()
     {
-        return $this->hasMany('App\Models\Comments\CommentVote', 'comment_id');
+        return $this->hasOne('App\Models\Comments\CommentVote', 'comment_id');
     }
 
     public function children()

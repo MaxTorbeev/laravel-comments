@@ -47,6 +47,7 @@ class PostsController extends Controller
         $post = Post::where('id', $id)->firstOrFail();
         $comments = $post->comment()
             ->where('level', '0')
+//            ->commentVote
             ->orderBy('vote', 'DESC')
             ->get();
 

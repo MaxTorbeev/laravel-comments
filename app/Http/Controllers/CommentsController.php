@@ -12,7 +12,8 @@ use Illuminate\Support\Facades\Auth;
 
 class CommentsController extends Controller
 {
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         $this->createComment($request);
 
         return redirect()->route('posts.show', ['id' => $request->post_id]);
@@ -29,25 +30,29 @@ class CommentsController extends Controller
     public function vote($id, Request $request, Comment $comment)
     {
         $comment = $comment->where('id', $id)->firstOrFail();
-        $vote = $comment->commentVote()->first();
+//        $comment->commentVote->update(['vote' => true]);
+//        dd($comment->commentVote->vote );
+        switch ($request->input('vote')) {
+            case 'yes':
+                if($comment->commentVote->vote == false or $comment->commentVote->vote == null)
+                    $comment->commentVote->update(['vote' => true]);
 
-        dd($vote);
+                return redirect()->back();
+                break;
+            case 'no':
+                if($comment->commentVote->vote == true and $comment->commentVote->vote == null)
+                    $comment->commentVote->update(['vote' => false]);
 
-        if ($request->input('vote') === 'yes')
-        {
-            $comment->increment('vote');
-        } else {
-            $comment->decrement('vote');
+                return redirect()->back();
+                break;
         }
-
-        return redirect()->back();
     }
 
     public function destroy($id, Comment $comment)
     {
         $comments = $comment->where('id', $id)->get();
-        foreach ($comments as $comment){
-           return $this->_deleteChild($comment);
+        foreach ($comments as $comment) {
+            return $this->_deleteChild($comment);
         }
     }
 
@@ -61,14 +66,14 @@ class CommentsController extends Controller
     {
         $comment->where('id', $comment->id)->delete();
 
-         if (count($comment->childrenRecursive) > 0) {
-            foreach($comment->childrenRecursive as $comment){
+        if (count($comment->childrenRecursive) > 0) {
+            foreach ($comment->childrenRecursive as $comment) {
                 $this->_deleteChild($comment);
                 $comment->where('id', $comment->id)->delete();
             }
         }
 
-        return  'comment has been deleted';
+        return 'comment has been deleted';
     }
 
 }
