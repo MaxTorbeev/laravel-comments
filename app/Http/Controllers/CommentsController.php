@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class CommentsController extends Controller
 {
@@ -30,22 +31,44 @@ class CommentsController extends Controller
     public function vote($id, Request $request, Comment $comment)
     {
         $comment = $comment->where('id', $id)->firstOrFail();
-//        $comment->commentVote->update(['vote' => true]);
-//        dd($comment->commentVote->vote );
-        switch ($request->input('vote')) {
-            case 'yes':
-                if($comment->commentVote->vote == false or $comment->commentVote->vote == null)
-                    $comment->commentVote->update(['vote' => true]);
+        $commentVote = CommentVote::where('user_id', Auth::user()->id)
+            ->where('comment_id', $id)
+            ->first();
 
-                return redirect()->back();
+//        dd($commentVote);
+        if ($commentVote != null) {
+            switch ($request->input('vote')) {
+                case 'true':
+                    if ($commentVote->vote == false) {
+                        $commentVote->update([
+                            'comment_id' => $id,
+                            'vote' => 'TRUE'
+                        ]);
+                        return redirect()->back()->with('message', 'Вы проголосовали положительно!');
+                    } else {
+                        return redirect()->back()->with('message', 'Вы уже проголосовали положительно!');
+                    }
                 break;
-            case 'no':
-                if($comment->commentVote->vote == true and $comment->commentVote->vote == null)
-                    $comment->commentVote->update(['vote' => false]);
 
-                return redirect()->back();
+                case 'false':
+                    if ($commentVote->vote == true) {
+                        $commentVote->update(['vote' => 'FALSE']);
+                        return redirect()->back()->with('message', 'Вы проголосовали отрицательно!');
+                    } else {
+                        return redirect()->back()->with('message', 'Вы уже проголосовали отрицательно!');
+                    }
                 break;
+            }
+        } else {
+            $comment->commentVote()->insert([
+                'comment_id' => $id,
+                'user_id'    => Auth::user()->id,
+                'vote'       => $request->input('vote'),
+            ]);
+            return redirect()->back()->with('message', 'Вы проголосовали впервые!');
         }
+
+        return redirect()->back()->with('message', 'Нужно проголосовать');
     }
 
     public function destroy($id, Comment $comment)

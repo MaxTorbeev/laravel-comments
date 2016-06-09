@@ -8,7 +8,7 @@ CREATE TABLE public.comments
   user_id integer DEFAULT 0,
   post_id integer NOT NULL,
   parent_id integer DEFAULT 0,
-  karma integer DEFAULT 0,
+  vote integer DEFAULT 0,
   level integer DEFAULT 0,
   user_ip character varying(255),
   content text NOT NULL,
@@ -36,7 +36,7 @@ OWNER TO postgres;
 CREATE INDEX comments_karma_index
 ON public.comments
 USING btree
-(karma);
+(vote);
 
 -- Index: public.comments_level_index
 

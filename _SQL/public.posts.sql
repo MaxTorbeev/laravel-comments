@@ -26,10 +26,3 @@ WITH (
 );
 ALTER TABLE public.posts
   OWNER TO postgres;
-
-
-ALTER TABLE public.posts
--- DROP CONSTRAINT posts_comment_id_foreign,
-ADD CONSTRAINT posts_comment_id_foreign FOREIGN KEY (post_id)
-   REFERENCES public.comments(id)
-   ON DELETE CASCADE;

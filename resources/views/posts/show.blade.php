@@ -34,6 +34,12 @@
         </div>
     </article>
 
+    @if (session('message'))
+        <div class="alert alert-success">
+            {{ session('message') }}
+        </div>
+    @endif
+
     <div class="panel panel-default">
         <div class="panel-heading">Comments</div>
         <div class="panel-body">

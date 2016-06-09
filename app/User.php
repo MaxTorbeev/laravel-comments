@@ -49,11 +49,11 @@ class User extends Authenticatable
 
     public function comment()
     {
-        return $this->belongsTo('App\Models\Comments\Comment');
+        return $this->hasMany('App\Models\Comments\Comment', 'user_id');
     }
 
     public function commentVote()
     {
-        return $this->belongsTo('App\Models\Comments\CommentVote', 'user_id');
+        return $this->hasMany('App\Models\Comments\CommentVote', 'user_id');
     }
 }
