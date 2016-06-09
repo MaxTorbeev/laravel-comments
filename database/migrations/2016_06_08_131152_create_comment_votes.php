@@ -18,7 +18,7 @@ class CreateCommentVotes extends Migration
             $table->integer('comment_id')->unsigned();
             $table->integer('user_id')->unsigned();
             $table->integer('user_ip')->nullable();
-            $table->integer('vote')->default(0)->nullable();
+            $table->boolean('vote')->default(0)->nullable();
             $table->timestamps();
 
             // Если пользователь удаляет комментарий
