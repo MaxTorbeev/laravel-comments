@@ -9,9 +9,11 @@
             {{ $comment->user->name }}
             <small class="pull-right text-right" data-commet-id="{{ $comment->id }}">
                 Vote:{{ $comment->vote }} <br>
+                @if(Auth::check())
                 Вам помог комментарий:
                 <a href="{{ route('comments.vote', ['id' => $comment->id]) }}?vote=true">да</a>
                 <a href="{{ route('comments.vote', ['id' => $comment->id]) }}?vote=false">нет</a>
+                @endif
             </small>
         </h4>
         id: {{ $comment->id }}<br>

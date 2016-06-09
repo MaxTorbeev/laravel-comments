@@ -56,8 +56,8 @@
 
 @section('footer')
     <script src="{{ url('js/public.js') }}"></script>
+    @if(Auth::check())
     <script>
-
         function form(tag, method, text){
             var csrftoken   = $('meta[name=_token]').attr('content'),
                 actionForm  = $(tag).attr('href'),
@@ -107,4 +107,5 @@
         })
 
     </script>
+    @endif
 @stop
